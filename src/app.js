@@ -11,31 +11,32 @@
 var React = require('react');
 var ExecutionEnvironment = require('react/lib/ExecutionEnvironment');
 var {Router} = require('director');
-var Dispatcher = require('./core/Dispatcher');
-var ActionTypes = require('./constants/ActionTypes');
 var router;
+
+var alt = require('./core/alt');
+
+var PageActions = require('../actions/PageActions');
+var RouteActions = require('../actions/RouteActions');
+
 
 // Export React so the dev tools can find it
 (window !== window.top ? window.top : window).React = React;
 
-Dispatcher.register((payload) => {
-
-  var action = payload.action;
-
-  switch (action.actionType)
-  {
-    case ActionTypes.SET_CURRENT_ROUTE:
-      router.setRoute(action.route);
-      break;
-
-    case ActionTypes.SET_CURRENT_PAGE:
-      if (ExecutionEnvironment.canUseDOM) {
-        document.title = action.page.title;
-      }
-      break;
+alt.createStore(class AppStore {
+  constructor() {
+    this.bindActions(PageActions);
+    this.bindActions(RouteActions);
   }
 
-  return true; // No errors.  Needed by promise in Dispatcher.
+  onSetCurrentRoute(route) {
+    router.setRoute(route);
+  }
+
+  onSet() {
+    if (ExecutionEnvironment.canUseDOM) {
+      document.title = action.page.title;
+    }
+  }
 });
 
 /**

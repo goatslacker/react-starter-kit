@@ -8,20 +8,12 @@
 
 'use strict';
 
-var Dispatcher = require('../core/Dispatcher');
-var ActionTypes = require('../constants/ActionTypes');
+var alt = require('../core/alt');
 
-module.exports = {
-
-  /**
-   * Set the current route.
-   * @param {string} route Supply a route value, such as `todos/completed`.
-   */
-  setRoute(route) {
-    Dispatcher.handleViewAction({
-      actionType: ActionTypes.SET_CURRENT_ROUTE,
-      route: route
-    });
+class RouteActions {
+  constructor() {
+    this.generateActions('setRoute');
   }
+}
 
-};
+alt.createActions(RouteActions, exports);

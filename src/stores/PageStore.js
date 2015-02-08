@@ -8,40 +8,32 @@
 
 'use strict';
 
-var Store = require('../core/Store');
-var Dispatcher = require('../core/Dispatcher');
-var ActionTypes = require('../constants/ActionTypes');
+var alt = require('../core/alt');
 
-/**
- * @typedef Page
- * @type {object}
- * @property {string} title
- * @property {string} description
- * @property {string} keywords
- */
-var _page;
+var PageActions = require('../actions/PageActions');
 
-var PageStore = new Store({
+class PageStore {
+  constructor() {
+    this.bindActions(PageActions);
 
-  /**
-   * Gets metadata associated with the current page.
-   * @returns {Page}
-   */
-  get() {
-    return _page || require('../constants/Settings').defaults.page;
+    this.page = PageStore.getDefaultPage();
   }
 
-});
-
-PageStore.dispatcherToken = Dispatcher.register(payload => {
-
-  var action = payload.action;
-
-  if (action.actionType == ActionTypes.SET_CURRENT_PAGE) {
-    _page = action.page;
-    PageStore.emitChange();
+  onSet(page) {
+    this.page = page;
   }
 
-});
+  static getDefaultPage() {
+    return {
+      title: 'React.js Starter Kit',
+      description: 'A skeleton for an isomorphic web application (SPA) built with React.js and Flux',
+      keywords: null
+    };
+  }
 
-module.exports = PageStore;
+  static get() {
+    return this.getState().page;
+  }
+}
+
+module.exports = alt.createStore(PageStore, 'PageStore');

@@ -14,6 +14,7 @@ var React = require('react');
 var PageStore = require('../../stores/PageStore');
 var Link = require('../Link');
 var Navbar = require('../Navbar');
+var ListenerMixin = require('alt/mixins/ListenerMixin');
 
 /**
  * Retrieves the current page metadata from the PageStore.
@@ -27,13 +28,14 @@ function getState() {
 
 var DefaultLayout = React.createClass({
 
-  mixins: [PageStore.Mixin],
+  mixins: [ListenerMixin],
 
   getInitialState() {
     return getState();
   },
 
   componentDidMount() {
+    this.listenTo(PageStore, this.onChange);
     PageStore.emitChange();
   },
 

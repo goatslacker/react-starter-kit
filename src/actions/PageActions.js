@@ -8,22 +8,16 @@
 
 'use strict';
 
-var Dispatcher = require('../core/Dispatcher');
-var ActionTypes = require('../constants/ActionTypes');
-var pageDefaults = require('../constants/Settings').defaults.page;
+var alt = require('../core/alt');
 var assign = require('react/lib/Object.assign');
+var PageStore = require('../stores/PageStore');
 
-module.exports = {
-
-  /**
-   * Set metadata for the current page (title, description, keywords etc.).
-   * @param {object} The page object.
-   */
+class PageActions {
   set(page) {
-    Dispatcher.handleViewAction({
-      actionType: ActionTypes.SET_CURRENT_PAGE,
-      page: assign({}, pageDefaults, page)
-    });
+    this.dispatch(
+      assign({}, PageStore.getDefaultPage(), page)
+    );
   }
+}
 
-};
+alt.createActions(PageActions, exports);

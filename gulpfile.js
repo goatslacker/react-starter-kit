@@ -110,16 +110,14 @@ gulp.task('pages', function() {
   src.pages = ['src/components/pages/**/*.js', 'src/components/pages/404.html'];
 
   var currentPage = {};
-  var Dispatcher = require('./src/core/Dispatcher');
-  var ActionTypes = require('./src/constants/ActionTypes');
+  var alt = require('./src/core/alt');
+  var PageActions = require('./src/actions/PageActions');
 
   // Capture document.title and other page metadata changes
-  Dispatcher.register(function(payload) {
-    if (payload.action.actionType == ActionTypes.SET_CURRENT_PAGE)
-    {
-      currentPage = payload.action.page;
+  alt.dispatcher.register(function (payload) {
+    if (payload.action === PageActions.SET) {
+      currentPage = payload.data;
     }
-    return true;
   });
 
   var render = $.render({
